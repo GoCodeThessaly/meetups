@@ -1,0 +1,188 @@
+\documentclass{beamer}
+\usepackage{verbatim}
+\usepackage{wrapfig}
+\usepackage{color} 
+\usetheme{Warsaw}
+\title{A gentle intro to Golang and the Go-universe}
+\author{Alex-P. Natsios}
+\institute{GoCode.Thessaly(7)}
+\date{28 feb 2014}
+\begin{document}
+    \begin{frame}
+       \titlepage
+    \end{frame}
+
+    \begin{frame}
+        \center\huge The Language
+    \end{frame}
+
+    \begin{frame}{A few words about GO}
+
+        {\bf Go}, also called {\bf golang}, was initially developed at google in 2007 and
+        announced in 2009 but most of its popularity boost (and hype) came
+        much later with its first stable release (1.0) on 28 Mar 2012.
+
+        \begin{block}{Characteristics:}
+            \begin{itemize}
+                \item Compiled
+                \item Statically typed and garbage collected
+                \item Object Oriented (but not in the usual way)
+                \item Sane Concurrency
+                \item Fast Compilers
+                \item Rich Standard Library
+                \item Scalable Tools
+            \end{itemize}
+        \end{block}
+    \end{frame}
+
+    \begin{frame}{The Gopher!}
+        \begin{figure}{l}{40mm}
+            \includegraphics[scale=0.5]{images/gopher.eps}
+        \end{figure}
+    \end{frame}
+
+    \begin{frame}{The Classic Example}
+        \verbatiminput{code/hello.go}
+    \end{frame}
+
+    \begin{frame}{Packages}
+        \begin{itemize}
+            \item Go code lives in packages.\\
+            \item A package consists of one or more source(.go) files.\\
+            \item Typically all files belonging to a package are placed in the same directory.
+            \item Visibility is determined by case: Foo is exported, foo is not.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Declarations}
+        import ``fmt''\\
+        const answer = 42\\
+        var something [10]byte\\
+        var names = []string \textbraceleft ``Alex'', ``George'', ``Maria'' \textbraceright \\
+    \end{frame}
+
+    \begin{frame}{Types}
+        \begin{itemize}
+            \item All basic types you would expect to have.\\
+            \item But string is a basic type.\\
+            \item No pointer arithmetic.\\
+            New (or not exactly that new) types:\\
+            \item Slices: Much like many other modern languages, []int \\
+            \item Maps: Because suddenly everybody needs them, map[string]int \\
+            \item Interfaces: for Polymorphism, interface\textbraceleft \textbraceright \\
+            \item Channels: Used to communicate with goroutines, chan int
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Scope}
+        \begin{itemize}
+            \item Universe
+            \item Package
+            \item File (for imports)
+            \item Function
+            \item Block
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Concurrency}
+       Concurrency is a property of systems in which several computations are
+       executing simultaneously and potentialy interacting with each other.
+       
+       \emph{ {\color{red}WARNING:}} Concurrency is {\color{red}NOT} parallelism,
+       although it enables parallelism if you have a multiprocessor system.
+    \end{frame}
+
+    \begin{frame}{Goroutines}
+        \begin{itemize}
+            \item Independently executing functions, launched by a {\bf go} statement. 
+            \item \emph{ {\color{red}NOT}} threads.
+            \item VERY cheap, you might have thousands of goroutines running
+                under the same thread.
+            \item Have their own dynamic call stack (growning and shrinking as needed).
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Channels}
+        A channel provides a connection between goroutines, allowing communication.\\
+        Channels can be unbuffered or buffered, so they both communicate and synchronize.\\
+        Buffered channels are asynchronous.
+    \end{frame}
+
+    \begin{frame}{Channels}{Code Example}
+        \verbatiminput{code/channels.go}
+    \end{frame}
+
+    \begin{frame}{Channels}{cont.}
+        When in main(), ``\textless-greetings'' is executed it waits for a value to be sent.\\
+        Same goes for our anonymous function that expects a reciever to be in place
+        in order for the greetings to be sent.\\
+        If no sender/receiver is ready (they both must be) then we wait until they are!
+    \end{frame}
+
+    \begin{frame}
+        \center\huge The Toolchain
+    \end{frame}
+
+    \begin{frame}{The go tool}
+
+        {\bf go build} - To compile the package.\\
+        {\bf go get} - To resolve and install deps.\\
+        {\bf go test} - To run the test suite and benchmarks.\\
+        {\bf go install} - To install the package.\\
+        {\bf go doc} - To generate documentation.\\
+        {\bf go fmt} - To properly format your code.\\
+        {\bf go run} - To build and run the app.\\
+        {\bf go tool} - To run extra tools.\\
+        and more (properly ``integrated'' in the {\bf go} tool)
+
+    \end{frame}
+
+    \begin{frame}{Building and workspaces}
+        A {\bf GO} program can be compiled and linked without additional build info.
+        A single tool can compile either individual files or entire systems.
+
+        In order to work without build scripts a certain directory structure
+        {\bf MUST} be followed.
+        \begin{block}{workspace}
+            workspace/\\
+            \ \ bin/\\
+            \ \ pkg/\\
+            \ \ src/\\
+        \end{block}
+    \end{frame}
+
+    \begin{frame}{workspaces}{cont.}
+        \begin{block}{Creating a workspace:}
+            mkdir -p \textdollar HOME/GoCode/\textbraceleft bin, pkg, src\textbraceright
+        \end{block}
+
+        \begin{block}{Telling go about it:}
+            export GOPATH=``\textdollar HOME/GoCode''\\
+            export PATH=``\textdollar PATH:\textdollar GOPATH/bin''
+        \end{block}
+    \end{frame}
+
+    \begin{frame}{Links}
+        Golang homepage:\\
+        \ \ \url{golang.org}\\
+        Go tour:\\
+        \ \ \url{tour.golang.org}\\
+        Package Doc:\\
+        \ \ \url{golang.org/pkg}\\
+        A little outdated but still useful page:\\
+        \ \ \url{go-lang.cat-v.org}\\
+        Obligatory subreddit:\\
+        \ \ \url{reddit.com/r/golang/}
+    \end{frame}
+
+    \begin{frame}{Thank you for your attention!}
+        \center Alex-P. Natsios\\
+        \center\url{drakevr@2f30.org}\\
+        \center\url{http://drakevr.gr}\\
+        \center\url{http://www.linkedin.com/in/drakevr}\\
+        \center\url{http://www.github.com/drakevr}\\
+        \center\url{http://www.facebook.com/drakevr}\\
+        \center\url{http://www.twitter.com/drakevr}
+    \end{frame}
+
+\end{document}
